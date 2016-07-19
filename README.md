@@ -1,7 +1,7 @@
 # Form Component (for [Vue](http://vuejs.org/))
 
 [![GitHub version](https://badge.fury.io/gh/10quality%2Fvue-form.svg)](https://badge.fury.io/gh/10quality%2Fvue-form)
-[![Bower version](https://badge.fury.io/bo/vue-form.svg)](https://badge.fury.io/bo/vue-form)
+[![Bower version](https://badge.fury.io/bo/10q-vue-form.svg)](https://badge.fury.io/bo/10q-vue-form)
 
 Form handler component for [Vue Js](http://vuejs.org/).
 
@@ -24,7 +24,7 @@ View [DEMO](http://codepen.io/amostajo/pen/vKdPbj).
 Several installation options are available:
 
 - [Download the latest release](https://github.com/10quality/vue-form/releases).
-- Install with [Bower](http://bower.io): `bower install vue-form`.
+- Install with [Bower](http://bower.io): `bower install 10q-vue-form`.
 
 ## Usage
 

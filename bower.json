@@ -1,5 +1,5 @@
 {
-  "name": "vue-form",
+  "name": "10q-vue-form",
   "description": "Social network sharing component for Vue JS.",
   "main": [
     "dist/vue.form.js"
