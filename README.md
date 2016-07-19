@@ -5,6 +5,8 @@
 
 Form handler component for [Vue Js](http://vuejs.org/).
 
+View [DEMO](http://codepen.io/amostajo/pen/vKdPbj).
+
 ## Package index
 - [Installation](#installation)
 - [Usage](#usage)
@@ -231,7 +233,7 @@ Another example:
 </body>
 ```
 
-### Results
+### Input handling
 
 Form comes with a second child component called `input-handler`. This component will facilitate the display of errors per input, improving UX.
 
