@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <body id="app">
+
+        <vform inline-template
+            action="https://restcountries.eu/rest/v1/alpha"
+            method="GET"
+            v-ref:form
+        >
+            <h1>Country search sample</h1>
+            Provided by: <a href="http://restcountries.eu/">http://restcountries.eu/</a>
+            <p>
+                <div><b>Alpha code 2</b></div>
+                <input type="text"
+                    v-model="request.codes"
+                    @keyup.enter="submit"
+                    placeholder="i.e. us or uk"
+                />
+
+                <input type="checkbox"
+                    v-model="request.clearOnFetch"
+                    value="1"
+                    checked
+                /> Clear results on submit?
+            </p>
+
+            <div v-if="request.codes">
+                <button @click="submit">
+                    Submit
+                </button>
+                <span v-if="isLoading"> Loading...</span>
+            </div>
+
+            <results inline-template
+                :model="response"
+                :clear-on-fetch="request.clearOnFetch"
+                v-ref:results
+            >
+                <div v-show="hasRecords">
+                    <hr>
+                    <div v-for="country in records" track-by="$index">
+                        <b>{{country.name}}</b>
+                        <i>Capital: {{country.capital}} | {{country.alpha2Code}} | {{country.region}}</i>
+                    </div>
+                </div>
+            </results>
+
+        </vform>
+
+        <script src="../bower_components/vue/dist/vue.js" type="text/javascript"></script>
+        <script src="../bower_components/vue-resource/dist/vue-resource.js" type="text/javascript"></script>
+        <script src="../src/vue.form.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            Vue.config.devtools = true;
+            Vue.http.options.emulateJSON = true;
+            var app = new Vue({
+                el: '#app'
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "vue-form",
+  "description": "Social network sharing component for Vue JS.",
+  "main": [
+    "dist/vue.form.js"
+  ],
+  "homepage": "https://github.com/10quality/vue-form",
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "form",
+    "input",
+    "results",
+    "handler"
+  ],
+  "authors": [
+    "Alejandro Mostajo <amostajo@gmail.com>",
+    "10Quality <info@10quality.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/10quality/vue-form.git"
+  },
+  "private": false,
+  "dependencies": {
+    "vue": "^1.0.24",
+    "vue-resource": "^0.9.3"
+  }
+}
