@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.0
+ * @version 1.0.1
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -30,6 +30,56 @@ Vue.component('vform', Vue.extend({
         {
             type: String,
             default: 'POST',
+        },
+        /**
+         * Request headers.
+         * @since 1.0.1
+         * @var object
+         */
+        headers:
+        {
+            type: Object,
+            default: function() { return undefined; },
+        },
+        /**
+         * Request timeout.
+         * @since 1.0.1
+         * @var int
+         */
+        timeout:
+        {
+            type: [String, Number],
+            default: undefined,
+        },
+        /**
+         * Flag that indicates if request has credentials.
+         * @since 1.0.1
+         * @var int
+         */
+        credentials:
+        {
+            type: [String, Boolean],
+            default: undefined,
+        },
+        /**
+         * Flag that indicates if request should emulate HTTP.
+         * @since 1.0.1
+         * @var bool
+         */
+        emulateHttp:
+        {
+            type: [String, Boolean],
+            default: undefined,
+        },
+        /**
+         * Flag that indicates if request should emulate JSON.
+         * @since 1.0.1
+         * @var bool
+         */
+        emulateJson:
+        {
+            type: [String, Boolean],
+            default: undefined,
         },
     },
     data: function() {
@@ -81,25 +131,24 @@ Vue.component('vform', Vue.extend({
         /**
          * Submits form.
          * @since 1.0.0
+         * @since 1.0.1 Options generated based on method.
          */
         submit: function()
         {
             this.$set('isLoading', true);
-            this.$http({
-                url: this.action,
-                method: this.method,
-                params: this.request,
-            }).then(this.onSubmit, this.onError);
+            this.$http(this.getOptions()).then(this.onSubmit, this.onError);
         },
         /**
          * Handles submission response.
          * @since 1.0.0
+         * @since 1.0.1 Added event dispatch.
          *
          * @param object response Response
          */
         onSubmit: function(response)
         {
             this.$set('response', response.data);
+            this.$dispatch('vform_success');
             if (response.data.redirect != undefined)
                 return window.location = response.data.redirect;
             this.onComplete();
@@ -107,21 +156,68 @@ Vue.component('vform', Vue.extend({
         /**
          * Handles on complete submission
          * @since 1.0.0
+         * @since 1.0.1 Added event dispatch.
          */
         onComplete: function()
         {
             this.$set('isLoading', false);
+            this.$dispatch('vform_complete');
         },
         /** 
          * Handles submission error.
          * @since 1.0.0
+         * @since 1.0.1 Added event dispatch.
          *
          * @param object e Error
          */
         onError: function(e)
         {
             console.log(e);
+            this.$dispatch('vform_error', e);
             this.onComplete();
+        },
+        /**
+         * Returns request options based on method.
+         * @since 1.0.1
+         *
+         * @return object
+         */
+        getOptions: function()
+        {
+            var options = {
+                url: this.action,
+                method: this.method,
+            };
+            if (this.headers !== undefined)
+                options.headers = this.headers;
+            if (this.timeout !== undefined)
+                options.timeout = this.timeout;
+            if (this.credentials !== undefined)
+                options.credentials = typeof(this.credentials) === 'boolean'
+                    ? this.credentials
+                    : this.credentials === 'true';
+            if (this.emulateHttp !== undefined)
+                options.emulateHTTP = typeof(this.emulateHttp) === 'boolean'
+                    ? this.emulateHttp
+                    : this.emulateHttp === 'true';
+            if (this.emulateJson !== undefined)
+                options.emulateJSON = typeof(this.emulateJson) === 'boolean'
+                    ? this.emulateJson
+                    : this.emulateJson === 'true';
+            switch (this.method) {
+                case 'post':
+                case 'POST':
+                case 'put':
+                case 'PUT':
+                case 'patch':
+                case 'PATCH':
+                    options.body = this.request;
+                    break;
+                default:
+                    options.params = this.request;
+                    break;
+            }
+            return options;
         },
     },
     components:
