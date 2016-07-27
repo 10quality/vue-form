@@ -13,10 +13,12 @@ View [DEMO](http://codepen.io/amostajo/pen/vKdPbj).
     - [Props](#props)
     - [Request](#request)
     - [Response](#response)
+        - [Redirection](#redirection)
     - [Results](#results)
         - [Props](#props-1)
     - [Input handling](#input-handling)
         - [Props](#props-2)
+    - [Events](#events)
 - [License](#license)
 
 ## Installation
@@ -69,6 +71,11 @@ Prop           | Data Type  | Default  | Description
 -------------- | ---------- | -------- | -----------
 `action`       | String     |          | Action URL where to send form data.
 `method`       | String     | POST     | Request method (i.e. GET or POST).
+`headers`      | Object     |          | Request headers ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`timeout`      | Number     |          | Request headers ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`credentials`  | Boolean    |          | Flag that indicates if request has credentials ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`emulate-http` | Boolean    |          | Flag that indicates if request should emulate HTTP ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`emulate-json` | Boolean    |          | Flag that indicates if request should emulate JSON ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
 
 ### Request
 
@@ -109,12 +116,12 @@ As reference, a basic contact form sample:
 
 Any response obtained from a request is set to the `response` data model.
 
-If following data is found, the form will *auto-process* the response (json) to facilitate its handling:
+If the following data is found, the form will *auto-process* the response (json) to facilitate its handling:
 
 ```json
 {
-    "error": false,
-    "message": "Contact information not send."
+    "error": true,
+    "message": "Contact information not sent."
 }
 ```
 
@@ -161,6 +168,18 @@ Another example using Bootstrap:
     </vform>
 
 </body>
+```
+
+#### Redirection
+
+If the following data is found, the form will redirect the current window to the value set in `response.redirect`:
+
+```json
+{
+    "error": false,
+    "message": "Information sent.",
+    "redirect": "http://some.url.com"
+}
 ```
 
 ### Results
@@ -264,7 +283,7 @@ In template:
 
         <input-handler class="form-group"
             class-error="has-error"
-            listen="email"
+            listen="name"
             :response="response"
         >
             <label for="name">Name</label>
@@ -305,6 +324,34 @@ Prop             | Data Type  | Default  | Description
 `class`          | String     |          | CSS class to apply to wrapper. (`<div>`)
 `class-error`    | String     |          | CSS class to apply to wrapper when errors are available.
 `response`       | Object     |          | Response to process. (required)
+
+### Events
+
+Events dispatched by form:
+
+Event            | Data sent                    | Description
+---------------- | ---------------------------- | -------------------
+`vform_success`  |                              | Dispatched once response is returned and assigned to model `response`.
+`vform_error`    | `e` Error response returned. | Dispatched on request error. (Error is thrown to console too).
+`vform_complete` |                              | Dispatched after request completed. (Success or error)
+
+Usage example:
+```javacript
+var app = new Vue({
+    el: '#app', // Assuming binding is app
+    events: {
+        'vform_success': function() {
+            // TODO MY CODE
+        },
+        'vform_error': function(e) {
+            // TODO MY CODE
+        },
+        'vform_complete': function() {
+            // TODO MY CODE
+        },
+    },
+});
+```
 
 ## License
 
