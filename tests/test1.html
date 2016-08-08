@@ -11,11 +11,16 @@
             Provided by: <a href="http://restcountries.eu/">http://restcountries.eu/</a>
             <p>
                 <div><b>Alpha code 2</b></div>
-                <input type="text"
-                    v-model="request.codes"
-                    @keyup.enter="submit"
-                    placeholder="i.e. us or uk"
-                />
+                <input-handler :response="response"
+                    validations="required|min:2|max:2"
+                    listen="codes"
+                >
+                    <input type="text"
+                        v-model="request.codes"
+                        @keyup.enter="submit"
+                        placeholder="i.e. us or uk"
+                    />
+                </input-handler>
 
                 <input type="checkbox"
                     v-model="request.clearOnFetch"
@@ -55,7 +60,7 @@
             Vue.config.devtools = true;
             Vue.http.options.emulateJSON = true;
             var app = new Vue({
-                el: '#app'
+                el: '#app',
             });
         </script>
     </body>

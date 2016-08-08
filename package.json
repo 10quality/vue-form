@@ -1,6 +1,6 @@
 {
   "name": "vue-form",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Form component for Vue JS.",
   "main": "dist/vue.social-share.js",
   "repository": {

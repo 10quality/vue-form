@@ -18,6 +18,7 @@ View [DEMO](http://codepen.io/amostajo/pen/vKdPbj).
         - [Props](#props-1)
     - [Input handling](#input-handling)
         - [Props](#props-2)
+        - [Validations](#validations)
     - [Events](#events)
 - [License](#license)
 
@@ -76,6 +77,7 @@ Prop           | Data Type  | Default  | Description
 `credentials`  | Boolean    |          | Flag that indicates if request has credentials ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
 `emulate-http` | Boolean    |          | Flag that indicates if request should emulate HTTP ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
 `emulate-json` | Boolean    |          | Flag that indicates if request should emulate JSON ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`errors`       | Object     | Object   | List of default validation rules error messages.
 
 ### Request
 
@@ -229,7 +231,7 @@ Prop             | Data Type  | Default  | Description
 ---------------- | ---------- | -------- | -----------
 `model`          | Array      |          | Data to compute for results (mostly required).
 `request`        | Object     |          | If form request is needed to be binded to results.
-`fetch-on-ready` | Boolean    | false    | Flag that forces form to submit and return response when `document` is *ready*.
+`fetch-onready`  | Boolean    | false    | Flag that forces form to submit and return response when `document` is *ready*.
 `clear-on-fetch` | Boolean    | true     | Flag that indicates if records should stack on every submission or not. (used for eager loading)
 
 Another example:
@@ -324,6 +326,51 @@ Prop             | Data Type  | Default  | Description
 `class`          | String     |          | CSS class to apply to wrapper. (`<div>`)
 `class-error`    | String     |          | CSS class to apply to wrapper when errors are available.
 `response`       | Object     |          | Response to process. (required)
+`validations`    | String     |          | List of validation rules to apply to input.
+
+#### Validations
+
+Form comes with a set of validation rules that can be applied to input values prior request. This are set in the `validations` prop, separated by `|`.
+
+In the following example, the input will validate that name is not empty (is a required field) and that it has at least 8 characters:
+
+```html
+<body id="app">
+
+    <vform inline-template>
+
+        <input-handler class="form-group"
+            class-error="has-error"
+            listen="name"
+            :response="response"
+            validations="required|min:8"
+        >
+            <label for="name">Name</label>
+            <input type="text"
+                class="form-control"
+                id="name"
+                v-model="request.name"
+            />
+        </input-handler>
+
+    </vform>
+
+</body>
+```
+
+List of available rules to use:
+
+Rule             | Params                                            | Sample                 | Description
+---------------- | ------------------------------------------------  | ---------------------- | -----------
+`required`       |                                                   | `required`             | Validates that value is not empty.
+`email`          |                                                   | `email`                | Validates that value has a valid email format.
+`number`         |                                                   | `number`               | Validates that value is numeric.
+`min`            | 1) minimum string length                          | `min:2`                | Validates that value's length is not lower than the minimum value set.
+`min_number`     | 1) minimum number     |                           | `min_number:10`        | Validates that value is not lower than the minimum value set.
+`max`            | 1) maximum string length                          | `max:10`               | Validates that value's length is not bigger than the maximum value set.
+`max_number`     | 1) maximum number length                          | `max_number:15`        | Validates that value is not bigger than the maximum value set.
+`between`        | 1) minimum string length 2) maximum string length | `between:5:10`         | Validates that value's length is in between the number range set.
+`between_number` | 1) minimum number 2) maximum number               | `between_number:1:100` | Validates that value is in between the number range set.
 
 ### Events
 
@@ -334,6 +381,7 @@ Event            | Data sent                    | Description
 `vform_success`  |                              | Dispatched once response is returned and assigned to model `response`.
 `vform_error`    | `e` Error response returned. | Dispatched on request error. (Error is thrown to console too).
 `vform_complete` |                              | Dispatched after request completed. (Success or error)
+`vform_invalid`  | `errors` List of errors.     | Dispatched and broadcasted when a validation ocurred.
 
 Usage example:
 ```javacript
@@ -347,6 +395,9 @@ var app = new Vue({
             // TODO MY CODE
         },
         'vform_complete': function() {
+            // TODO MY CODE
+        },
+        'vform_invalid': function(errors) {
             // TODO MY CODE
         },
     },
