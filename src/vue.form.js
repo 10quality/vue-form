@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.2
+ * @version 1.0.3
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -177,6 +177,7 @@ Vue.component('vform', Vue.extend({
          * Handles submission response.
          * @since 1.0.0
          * @since 1.0.1 Added event dispatch.
+         * @since 1.0.3 Added event broadcast.
          *
          * @param object response Response
          */
@@ -184,6 +185,7 @@ Vue.component('vform', Vue.extend({
         {
             this.$set('response', response.data);
             this.$dispatch('vform_success');
+            this.$broadcast('vform_success');
             if (response.data.redirect != undefined)
                 return window.location = response.data.redirect;
             this.onComplete();
@@ -192,16 +194,19 @@ Vue.component('vform', Vue.extend({
          * Handles on complete submission
          * @since 1.0.0
          * @since 1.0.1 Added event dispatch.
+         * @since 1.0.3 Added event broadcast.
          */
         onComplete: function()
         {
             this.$set('isLoading', false);
             this.$dispatch('vform_complete');
+            this.$broadcast('vform_complete');
         },
         /** 
          * Handles submission error.
          * @since 1.0.0
          * @since 1.0.1 Added event dispatch.
+         * @since 1.0.3 Added event broadcast.
          *
          * @param object e Error
          */
@@ -209,6 +214,7 @@ Vue.component('vform', Vue.extend({
         {
             console.log(e);
             this.$dispatch('vform_error', e);
+            this.$broadcast('vform_error', e);
             this.onComplete();
         },
         /**
