@@ -187,7 +187,7 @@ Vue.component('vform', Vue.extend({
             this.$set('response', response.data);
             this.$dispatch('vform_success');
             this.$broadcast('vform_success');
-            if (this.response.errors !== undefined && this.response.errors.length > 0) {
+            if (this.response.errors !== undefined && Object.keys(this.response.errors).length > 0) {
                 this.$dispatch('vform_invalid', this.response.errors);
                 this.$broadcast('vform_invalid', this.response.errors);
             }
