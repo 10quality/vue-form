@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.3
+ * @version 1.0.4
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -178,6 +178,7 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.0
          * @since 1.0.1 Added event dispatch.
          * @since 1.0.3 Added event broadcast.
+         * @since 1.0.4 Response errors triggers invalid event.
          *
          * @param object response Response
          */
@@ -186,7 +187,11 @@ Vue.component('vform', Vue.extend({
             this.$set('response', response.data);
             this.$dispatch('vform_success');
             this.$broadcast('vform_success');
-            if (response.data.redirect != undefined)
+            if (this.response.errors !== undefined && this.response.errors.length > 0) {
+                this.$dispatch('vform_invalid', this.response.errors);
+                this.$broadcast('vform_invalid', this.response.errors);
+            }
+            if (response.data.redirect !== undefined)
                 return window.location = response.data.redirect;
             this.onComplete();
         },
