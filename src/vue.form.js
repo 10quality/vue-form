@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.4
+ * @version 1.0.5
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -102,6 +102,26 @@ Vue.component('vform', Vue.extend({
                     between_number: 'Value must be between %1% to %2%.',
                 };
             },
+        },
+        /**
+         * Form given ID.
+         * @since 1.0.5
+         * @var string
+         */
+        id:
+        {
+            type: [String, Number],
+            default: undefined,
+        },
+        /**
+         * Form loop key (in case it its used inside a v-for).
+         * @since 1.0.5
+         * @var string
+         */
+        key:
+        {
+            type: [String, Number],
+            default: undefined,
         },
     },
     data: function() {

@@ -78,6 +78,8 @@ Prop           | Data Type  | Default  | Description
 `emulate-http` | Boolean    |          | Flag that indicates if request should emulate HTTP ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
 `emulate-json` | Boolean    |          | Flag that indicates if request should emulate JSON ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
 `errors`       | Object     | Object   | List of default validation rules error messages.
+`id`           | String     |          | Form given ID.
+`key`          | String     |          | Form given loop key (i.e. in case of being used inside a v-for).
 
 ### Request
 
