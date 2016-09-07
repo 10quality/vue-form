@@ -364,15 +364,18 @@ List of available rules to use:
 
 Rule             | Params                                            | Sample                 | Description
 ---------------- | ------------------------------------------------  | ---------------------- | -----------
-`required`       |                                                   | `required`             | Validates that value is not empty.
-`email`          |                                                   | `email`                | Validates that value has a valid email format.
-`number`         |                                                   | `number`               | Validates that value is numeric.
-`min`            | 1) minimum string length                          | `min:2`                | Validates that value's length is not lower than the minimum value set.
-`min_number`     | 1) minimum number     |                           | `min_number:10`        | Validates that value is not lower than the minimum value set.
-`max`            | 1) maximum string length                          | `max:10`               | Validates that value's length is not bigger than the maximum value set.
-`max_number`     | 1) maximum number length                          | `max_number:15`        | Validates that value is not bigger than the maximum value set.
-`between`        | 1) minimum string length 2) maximum string length | `between:5:10`         | Validates that value's length is in between the number range set.
-`between_number` | 1) minimum number 2) maximum number               | `between_number:1:100` | Validates that value is in between the number range set.
+`required`       |                                                   | `required`             | Validates if value is not empty.
+`required_if`    | 1) comparison field                               | `required_if:email`    | Validates if value is not empty only if comparison field is not empty.
+`email`          |                                                   | `email`                | Validates if value has a valid email format.
+`number`         |                                                   | `number`               | Validates if value is numeric.
+`min`            | 1) minimum string length                          | `min:2`                | Validates if value's length is not lower than the minimum value set.
+`min_number`     | 1) minimum number                                 | `min_number:10`        | Validates if value is not lower than the minimum value set.
+`max`            | 1) maximum string length                          | `max:10`               | Validates if value's length is not bigger than the maximum value set.
+`max_number`     | 1) maximum number length                          | `max_number:15`        | Validates if value is not bigger than the maximum value set.
+`between`        | 1) minimum string length 2) maximum string length | `between:5:10`         | Validates if value's length is in between the number range set.
+`between_number` | 1) minimum number 2) maximum number               | `between_number:1:100` | Validates if value is in between the number range set.
+`equals`         | 1) comparison field                               | `equals:password`      | Validates if value is the same as comparison field's value.
+`url`            |                                                   | `url`                  | Validates if value has a valid url format.
 
 ### Events
 

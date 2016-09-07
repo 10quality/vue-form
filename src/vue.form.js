@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.5
+ * @version 1.0.7
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -84,6 +84,7 @@ Vue.component('vform', Vue.extend({
         /**
          * List of default errors.
          * @since 1.0.2
+         * @since 1.0.7 Added equal,required_if,url
          * @var object
          */
         errors:
@@ -100,6 +101,9 @@ Vue.component('vform', Vue.extend({
                     max_number: 'Value must be no more than %1%.',
                     between: 'Value must have between %1% to %2% characters.',
                     between_number: 'Value must be between %1% to %2%.',
+                    equals: 'Value must be equal to %1%.',
+                    required_if: 'Required field.',
+                    url: 'Url value is invalid.',
                 };
             },
         },
@@ -396,6 +400,7 @@ Vue.component('vform', Vue.extend({
                 /**
                  * Validates input.
                  * @since 1.0.2
+                 * @since 1.0.7 Added equal,required_if,url
                  *
                  * @return bool
                  */
@@ -492,6 +497,38 @@ Vue.component('vform', Vue.extend({
                                 break;
                             case 'email':
                                 var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                if (this.$parent.request[this.listen] !== undefined
+                                    && !regex.test(this.$parent.request[this.listen])
+                                ) {
+                                    this.addError(options);
+                                    success = false;
+                                }
+                                break;
+                            case 'equals':
+                                if (options.length < 2)
+                                    throw 'Comparison field is not defined in validation rules';
+                                if (this.$parent.request[this.listen] !== undefined
+                                    && this.$parent.request[this.listen] !== this.$parent.request[options[1]]
+                                ) {
+                                    this.addError(options);
+                                    success = false;
+                                }
+                                break;
+                            case 'required_if':
+                                if (options.length < 2)
+                                    throw 'Comparison field is not defined in validation rules';
+                                if (this.$parent.request[options[1]] !== undefined
+                                    && this.$parent.request[options[1]].length > 0
+                                    && (this.$parent.request[this.listen] === undefined
+                                        || this.$parent.request[this.listen].length === 0
+                                    )
+                                ) {
+                                    this.addError(options);
+                                    success = false;
+                                }
+                                break;
+                            case 'url':
+                                var regex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
                                 if (this.$parent.request[this.listen] !== undefined
                                     && !regex.test(this.$parent.request[this.listen])
                                 ) {
