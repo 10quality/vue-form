@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.7
+ * @version 1.0.8
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -401,6 +401,7 @@ Vue.component('vform', Vue.extend({
                  * Validates input.
                  * @since 1.0.2
                  * @since 1.0.7 Added equal,required_if,url
+                 * @since 1.0.8 Bug fixes.
                  *
                  * @return bool
                  */
@@ -498,6 +499,7 @@ Vue.component('vform', Vue.extend({
                             case 'email':
                                 var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                                 if (this.$parent.request[this.listen] !== undefined
+                                    && this.$parent.request[this.listen].length > 0
                                     && !regex.test(this.$parent.request[this.listen])
                                 ) {
                                     this.addError(options);
@@ -530,6 +532,7 @@ Vue.component('vform', Vue.extend({
                             case 'url':
                                 var regex = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/;
                                 if (this.$parent.request[this.listen] !== undefined
+                                    && this.$parent.request[this.listen].length > 0
                                     && !regex.test(this.$parent.request[this.listen])
                                 ) {
                                     this.addError(options);
