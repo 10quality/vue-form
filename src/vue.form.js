@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.8
+ * @version 1.0.9
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -127,6 +127,26 @@ Vue.component('vform', Vue.extend({
             type: [String, Number],
             default: undefined,
         },
+        /**
+         * Flag that indicates if response needs to be converted to json.
+         * @since 1.0.9
+         * @var bool
+         */
+        responseJson:
+        {
+            type: [String, Boolean],
+            default: false,
+        },
+        /**
+         * Flag that indicates if response needs to be converted to json.
+         * @since 1.0.9
+         * @var bool
+         */
+        responseBlob:
+        {
+            type: [String, Boolean],
+            default: false,
+        },
     },
     data: function() {
         return {
@@ -203,12 +223,21 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.1 Added event dispatch.
          * @since 1.0.3 Added event broadcast.
          * @since 1.0.4 Response errors triggers invalid event.
+         * @since 1.0.9 Forces response conversion to jsob or blob.
          *
          * @param object response Response
          */
         onSubmit: function(response)
         {
-            this.$set('response', response.data);
+            this.$set(
+                'response',
+                this.responseJson
+                    ? response.json()
+                    : (this.responseBlob
+                        ? response.blob()
+                        : response.data
+                    )
+            );
             this.$dispatch('vform_success');
             this.$broadcast('vform_success');
             if (this.response.errors !== undefined && Object.keys(this.response.errors).length > 0) {

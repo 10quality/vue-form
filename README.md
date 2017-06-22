@@ -68,18 +68,20 @@ Add the component in your vue view.
 
 List of available props to use in component:
 
-Prop           | Data Type  | Default  | Description
--------------- | ---------- | -------- | -----------
-`action`       | String     |          | Action URL where to send form data.
-`method`       | String     | POST     | Request method (i.e. GET or POST).
-`headers`      | Object     |          | Request headers ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
-`timeout`      | Number     |          | Request headers ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
-`credentials`  | Boolean    |          | Flag that indicates if request has credentials ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
-`emulate-http` | Boolean    |          | Flag that indicates if request should emulate HTTP ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
-`emulate-json` | Boolean    |          | Flag that indicates if request should emulate JSON ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
-`errors`       | Object     | Object   | List of default validation rules error messages.
-`id`           | String     |          | Form given ID.
-`key`          | String     |          | Form given loop key (i.e. in case of being used inside a v-for).
+Prop            | Data Type  | Default  | Description
+--------------- | ---------- | -------- | -----------
+`action`        | String     |          | Action URL where to send form data.
+`method`        | String     | POST     | Request method (i.e. GET or POST).
+`headers`       | Object     |          | Request headers ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`timeout`       | Number     |          | Request headers ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`credentials`   | Boolean    |          | Flag that indicates if request has credentials ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`emulate-http`  | Boolean    |          | Flag that indicates if request should emulate HTTP ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`emulate-json`  | Boolean    |          | Flag that indicates if request should emulate JSON ([reference](https://github.com/vuejs/vue-resource/blob/master/docs/http.md#options)).
+`errors`        | Object     | Object   | List of default validation rules error messages.
+`id`            | String     |          | Form given ID.
+`key`           | String     |          | Form given loop key (i.e. in case of being used inside a v-for).
+`response-json` | Boolean    | false    | Forces response to be returned and parsed as JSON.
+`response-blob` | Boolean    | false    | Forces response to be returned as Blob.
 
 ### Request
 
