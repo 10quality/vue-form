@@ -3,7 +3,7 @@
 [![GitHub version](https://badge.fury.io/gh/10quality%2Fvue-form.svg)](https://badge.fury.io/gh/10quality%2Fvue-form)
 [![Bower version](https://badge.fury.io/bo/10q-vue-form.svg)](https://badge.fury.io/bo/10q-vue-form)
 
-Form handler component for [Vue Js](http://vuejs.org/).
+Form handler component for [Vue v1](http://vuejs.org/).
 
 View [DEMO](http://codepen.io/amostajo/pen/vKdPbj).
 
