@@ -3,80 +3,84 @@
     <head>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     </head>
-    <body id="app">
+    <body>
+        <div id="app">
 
-        <vform inline-template
-            v-ref:form
-        >
-            <div class="container">
-                <input-handler :response="response"
-                    validations="required|min:8"
-                    listen="password"
-                    class="form-group"
-                    class-error="has-error"
-                >
-                    <label for="password">Password</label>
-                    <input type="password"
-                        v-model="request.password"
-                        @keyup.enter="submit"
-                        placeholder="Password"
-                        class="form-control"
-                    />
-                </input-handler>
+            <vform inline-template
+                ref="form"
+                @invalid="onInvalid"
+                @error="onError"
+            >
+                <div class="container">
+                    <input-handler v-model="response"
+                        validations="required|min:8"
+                        listen="password"
+                        class="form-group"
+                        class-error="has-error"
+                    >
+                        <label for="password">Password</label>
+                        <input type="password"
+                            v-model="request.password"
+                            @keyup.enter="submit"
+                            placeholder="Password"
+                            class="form-control"
+                        />
+                    </input-handler>
 
-                <input-handler :response="response"
-                    validations="required_if:password|min:8|equals:password"
-                    listen="password2"
-                    class="form-group"
-                    class-error="has-error"
-                >
-                    <label for="password">Password (repeat)</label>
-                    <input type="password"
-                        v-model="request.password2"
-                        @keyup.enter="submit"
-                        placeholder="Repeat password"
-                        class="form-control"
-                    />
-                </input-handler>
-                <input-handler :response="response"
-                    validations="required_if:password"
-                    listen="passwordQuestion"
-                    class="form-group"
-                    class-error="has-error"
-                >
-                    <label for="password">Password remember question?</label>
-                    <input type="text"
-                        v-model="request.passwordQuestion"
-                        @keyup.enter="submit"
-                        placeholder="Remember the answer"
-                        class="form-control"
-                    />
-                </input-handler>
-                <input-handler :response="response"
-                    validations="url"
-                    listen="url"
-                    class="form-group"
-                    class-error="has-error"
-                >
-                    <label for="password">Url</label>
-                    <input type="url"
-                        v-model="request.url"
-                        @keyup.enter="submit"
-                        class="form-control"
-                    />
-                </input-handler>
+                    <input-handler v-model="response"
+                        validations="required_if:password|min:8|equals:password"
+                        listen="password2"
+                        class="form-group"
+                        class-error="has-error"
+                    >
+                        <label for="password">Password (repeat)</label>
+                        <input type="password"
+                            v-model="request.password2"
+                            @keyup.enter="submit"
+                            placeholder="Repeat password"
+                            class="form-control"
+                        />
+                    </input-handler>
+                    <input-handler v-model="response"
+                        validations="required_if:password"
+                        listen="passwordQuestion"
+                        class="form-group"
+                        class-error="has-error"
+                    >
+                        <label for="password">Password remember question?</label>
+                        <input type="text"
+                            v-model="request.passwordQuestion"
+                            @keyup.enter="submit"
+                            placeholder="Remember the answer"
+                            class="form-control"
+                        />
+                    </input-handler>
+                    <input-handler v-model="response"
+                        validations="url"
+                        listen="url"
+                        class="form-group"
+                        class-error="has-error"
+                    >
+                        <label for="password">Url</label>
+                        <input type="url"
+                            v-model="request.url"
+                            @keyup.enter="submit"
+                            class="form-control"
+                        />
+                    </input-handler>
 
-                <div>
-                    <button @click="submit" class="btn btn-primary">
-                        Submit
-                    </button>
-                    <span v-if="isLoading"> Loading...</span>
+                    <div>
+                        <button @click="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                        <span v-if="isLoading"> Loading...</span>
+                    </div>
                 </div>
-            </div>
-        </vform>
+            </vform>
 
-        <script src="../bower_components/vue/dist/vue.js" type="text/javascript"></script>
-        <script src="../bower_components/vue-resource/dist/vue-resource.js" type="text/javascript"></script>
+        </div>
+        <script src="../node_modules/vue/dist/vue.js" type="text/javascript"></script>
+        <script src="../node_modules/vue-resource/dist/vue-resource.js" type="text/javascript"></script>
         <script src="../src/vue.form.js" type="text/javascript"></script>
         <script type="text/javascript">
             Vue.config.debug = true;
@@ -84,6 +88,19 @@
             Vue.http.options.emulateJSON = true;
             var app = new Vue({
                 el: '#app',
+                methods:
+                {
+                    onInvalid: function(errors)
+                    {
+                        console.log('Invalid form:');
+                        console.log(errors);
+                    },
+                    onError: function(e)
+                    {
+                        console.log('Fatal error:');
+                        console.log(e);
+                    },
+                },
             });
         </script>
     </body>

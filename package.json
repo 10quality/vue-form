@@ -1,8 +1,8 @@
 {
   "name": "vue-form",
-  "version": "1.0.9",
+  "version": "2.0.0",
   "description": "Form component for Vue JS.",
-  "main": "dist/vue.social-share.js",
+  "main": "dist/vue.form.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/10quality/vue-form.git"
@@ -25,5 +25,9 @@
     "grunt": "^0.4.5",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-uglify": "^0.11.0"
+  },
+  "dependencies": {
+    "vue": "^2.3.4",
+    "vue-resource": "^1.3.4"
   }
 }

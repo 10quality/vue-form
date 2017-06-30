@@ -3,7 +3,9 @@
 [![GitHub version](https://badge.fury.io/gh/10quality%2Fvue-form.svg)](https://badge.fury.io/gh/10quality%2Fvue-form)
 [![Bower version](https://badge.fury.io/bo/10q-vue-form.svg)](https://badge.fury.io/bo/10q-vue-form)
 
-Form handler component for [Vue v1](http://vuejs.org/).
+Form handler component for [Vue](http://vuejs.org/) v2.
+
+**NOTE** Use [v1.0 branch](https://github.com/10quality/vue-form/tree/v1.0) to use this with Vue v1.
 
 View [DEMO](http://codepen.io/amostajo/pen/vKdPbj).
 
@@ -44,7 +46,7 @@ Add the component in your vue view.
 
 ```html
 <!-- Assuming your view app is APP. -->
-<body id="app">
+<div id="app">
 
     <vform inline-template
         action="http://some.url.com"
@@ -59,7 +61,7 @@ Add the component in your vue view.
 
     </vform>
 
-</body>
+</div>
 ```
 
 *NOTE:* `inline-template` must be present.
@@ -90,7 +92,7 @@ Data sent by form should be binded to the `request` data model. In other words, 
 As reference, a basic contact form sample:
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template action="http://some.url.com">
 
@@ -115,7 +117,7 @@ As reference, a basic contact form sample:
 
     </vform>
 
-</body>
+</div>
 ```
 
 ### Response
@@ -134,7 +136,7 @@ If the following data is found, the form will *auto-process* the response (json)
 This response can be displayed in the template like:
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template>
 
@@ -146,7 +148,7 @@ This response can be displayed in the template like:
 
     </vform>
 
-</body>
+</div>
 ```
 
 Computed properties to use in template:
@@ -160,7 +162,7 @@ Property       | Data Type  | Description
 Another example using Bootstrap:
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template>
 
@@ -173,7 +175,7 @@ Another example using Bootstrap:
 
     </vform>
 
-</body>
+</div>
 ```
 
 #### Redirection
@@ -193,7 +195,7 @@ If the following data is found, the form will redirect the current window to the
 Form comes with a child component called `results`. This component will facilitate the handling of data returned by request (thought for searches).
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template>
 
@@ -204,7 +206,7 @@ Form comes with a child component called `results`. This component will facilita
         />
 
         <results inline-template
-            :model="response"
+            v-model="response"
             fetch-on-ready="true"
             clear-on-fetch="false"
         >
@@ -219,7 +221,7 @@ Form comes with a child component called `results`. This component will facilita
 
     </vform>
 
-</body>
+</div>
 ```
 
 In the example above, `results` child component is handling search results returned by the response (assuming `response` contains only results) and it is computing them into a property called `records`.
@@ -241,11 +243,11 @@ Prop             | Data Type  | Default  | Description
 Another example:
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template>
 
-        <results inline-template :model="response.results">
+        <results inline-template v-model="response.results">
             
                 <div v-for="record in records">
                     {{record | json}}
@@ -255,7 +257,7 @@ Another example:
 
     </vform>
 
-</body>
+</div>
 ```
 
 ### Input handling
@@ -283,14 +285,14 @@ Response:
 In template:
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template>
 
         <input-handler class="form-group"
             class-error="has-error"
             listen="name"
-            :response="response"
+            v-model="response"
         >
             <label for="name">Name</label>
             <input type="text"
@@ -303,7 +305,7 @@ In template:
         <input-handler class="form-group"
             class-error="has-error"
             listen="email"
-            :response="response"
+            v-model="response"
         >
             <label for="email">Email</label>
             <input type="email"
@@ -315,10 +317,10 @@ In template:
 
     </vform>
 
-</body>
+</div>
 ```
 
-In the example above, the response returned a list of errors per input. `input-handler` will process the response and if errors are found, it will add an error class to the input wrapper and will list the erros under the input using a `<ul class="errors">` HTML tag.
+In the example above, the response returned a list of errors per input. `input-handler` will process the response and if errors are found (response must be passed as `v-model`), it will add an error class to the input wrapper and will list the erros under the input using a `<ul class="errors">` HTML tag.
 
 #### Props
 
@@ -339,14 +341,14 @@ Form comes with a set of validation rules that can be applied to input values pr
 In the following example, the input will validate that name is not empty (is a required field) and that it has at least 8 characters:
 
 ```html
-<body id="app">
+<div id="app">
 
     <vform inline-template>
 
         <input-handler class="form-group"
             class-error="has-error"
             listen="name"
-            :response="response"
+            v-model="response"
             validations="required|min:8"
         >
             <label for="name">Name</label>
@@ -359,7 +361,7 @@ In the following example, the input will validate that name is not empty (is a r
 
     </vform>
 
-</body>
+</div>
 ```
 
 List of available rules to use:
@@ -383,34 +385,25 @@ Rule             | Params                                            | Sample   
 
 Events dispatched by form:
 
-Event            | Data sent                    | Description
----------------- | ---------------------------- | -------------------
-`vform_success`  |                              | Dispatched once response is returned and assigned to model `response`.
-`vform_error`    | `e` Error response returned. | Dispatched on request error. (Error is thrown to console too).
-`vform_complete` |                              | Dispatched after request completed. (Success or error)
-`vform_invalid`  | `errors` List of errors.     | Dispatched and broadcasted when a validation ocurred.
+Event      | Data sent                    | Description
+---------- | ---------------------------- | -------------------
+`success`  |                              | Emitted once response is returned and assigned to model `response`.
+`error`    | `e` Error response returned. | Emitted on request error. (Error is thrown to console too).
+`complete` |                              | Emitted after request completed. (Success or error)
+`invalid`  | `errors` List of errors.     | Emitted and broadcasted when a validation ocurred.
 
 Usage example:
-```javacript
-var app = new Vue({
-    el: '#app', // Assuming binding is app
-    events: {
-        'vform_success': function() {
-            // TODO MY CODE
-        },
-        'vform_error': function(e) {
-            // TODO MY CODE
-        },
-        'vform_complete': function() {
-            // TODO MY CODE
-        },
-        'vform_invalid': function(errors) {
-            // TODO MY CODE
-        },
-    },
-});
+```html
+<div id="app">
+    <vform inline-template
+        @success="eventHandlerMethod"
+        @error="eventHandlerMethod"
+        @complete="eventHandlerMethod"
+        @invalid="eventHandlerMethod"
+    ></vform>
+</div>
 ```
 
 ## License
 
-Copyright (c) 2016 [10Quality](http://www.10quality.com/). Under MIT License.
+Copyright (c) 2017 [10Quality](http://www.10quality.com/). Under MIT License.

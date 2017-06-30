@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.9
+ * @version 2.0.0
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -120,9 +120,10 @@ Vue.component('vform', Vue.extend({
         /**
          * Form loop key (in case it its used inside a v-for).
          * @since 1.0.5
+         * @since 2.0.0 Refactored due to be a reserved name.
          * @var string
          */
-        key:
+        index:
         {
             type: [String, Number],
             default: undefined,
@@ -199,22 +200,22 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.0
          * @since 1.0.1 Options generated based on method.
          * @since 1.0.2 Validations added.
+         * @since 2.0.0 Use $emit and remove $set.
          */
         submit: function()
         {
             // Input validations
             var isValid = true;
-            this.$set('response', {});
+            this.response = {};
             for (var i in this.$children) {
                 if (typeof(this.$children[i].validate) === 'function')
                     isValid = this.$children[i].validate() && isValid;
             }
             if (isValid) {
-                this.$set('isLoading', true);
+                this.isLoading = true;
                 this.$http(this.getOptions()).then(this.onSubmit, this.onError);
             } else {
-                this.$dispatch('vform_invalid', this.response.errors);
-                this.$broadcast('vform_invalid', this.response.errors);
+                this.$emit('invalid', this.response.errors);
             }
         },
         /**
@@ -224,25 +225,21 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.3 Added event broadcast.
          * @since 1.0.4 Response errors triggers invalid event.
          * @since 1.0.9 Forces response conversion to jsob or blob.
+         * @since 2.0.0 Use $emit and remove $set.
          *
          * @param object response Response
          */
         onSubmit: function(response)
         {
-            this.$set(
-                'response',
-                this.responseJson
-                    ? response.json()
-                    : (this.responseBlob
-                        ? response.blob()
-                        : response.data
-                    )
-            );
-            this.$dispatch('vform_success');
-            this.$broadcast('vform_success');
+            this.response = this.responseJson
+                ? response.json()
+                : (this.responseBlob
+                    ? response.blob()
+                    : response.data
+                );
+            this.$emit('success', response);
             if (this.response.errors !== undefined && Object.keys(this.response.errors).length > 0) {
-                this.$dispatch('vform_invalid', this.response.errors);
-                this.$broadcast('vform_invalid', this.response.errors);
+                this.$emit('invalid', this.response.errors);
             }
             if (response.data.redirect !== undefined)
                 return window.location = response.data.redirect;
@@ -253,26 +250,25 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.0
          * @since 1.0.1 Added event dispatch.
          * @since 1.0.3 Added event broadcast.
+         * @since 2.0.0 Use $emit and remove $set.
          */
         onComplete: function()
         {
-            this.$set('isLoading', false);
-            this.$dispatch('vform_complete');
-            this.$broadcast('vform_complete');
+            this.isLoading = false;
+            this.$emit('complete');
         },
         /** 
          * Handles submission error.
          * @since 1.0.0
          * @since 1.0.1 Added event dispatch.
          * @since 1.0.3 Added event broadcast.
+         * @since 2.0.0 Use $emit instead.
          *
          * @param object e Error
          */
         onError: function(e)
         {
-            console.log(e);
-            this.$dispatch('vform_error', e);
-            this.$broadcast('vform_error', e);
+            this.$emit('error', e);
             this.onComplete();
         },
         /**
@@ -325,15 +321,16 @@ Vue.component('vform', Vue.extend({
          * Input Handler.
          * Handles input errors.
          * Vue sub component.
-         * @since 1.0.2
+         * @since 1.0.0
+         * @since 2.0.0 Refactored to Vue2.
          */
-        'input-handler': Vue.extend({
-            template: '<div :class="[class,errorCss]"><slot></slot><div class="errors"><ul><li v-for="(index, error) in inputErrors" track-by="$index">{{error}}</li></ul></div></div>',
+        'input-handler': {
+            template: '<div :class="[cssClass,errorCss]"><slot></slot><div class="errors"><ul><li v-for="(error, index) in inputErrors" track-by="$index" v-html="error"></li></ul></div></div>',
             props:
             {
                 /**
                  * Name of the error key to listen to.
-                 * @since 1.0 
+                 * @since 1.0.0
                  * @var string
                  */
                 listen:
@@ -343,17 +340,18 @@ Vue.component('vform', Vue.extend({
                 },
                 /**
                  * CSS class to apply to wrapper.
-                 * @since 1.0 
+                 * @since 1.0.0
+                 * @since 2.0.0 Refactored to cssClass
                  * @var string
                  */
-                class:
+                cssClass:
                 {
                     type: String,
                     default: '',
                 },
                 /**
                  * CSS class to apply to wrapper when errors are available.
-                 * @since 1.0 
+                 * @since 1.0.0
                  * @var string
                  */
                 classError:
@@ -363,10 +361,11 @@ Vue.component('vform', Vue.extend({
                 },
                 /**
                  * Input errors to listen to.
-                 * @since 1.0
+                 * @since 1.0.0
+                 * @since 2.0.0 Refactored to "value" in order to use v-model directive.
                  * @var object
                  */
-                response:
+                value:
                 {
                     type: [Object, Array],
                     default: function() {
@@ -394,10 +393,10 @@ Vue.component('vform', Vue.extend({
                 inputErrors: function()
                 {
                     var errors = [];
-                    if (this.response.errors !== undefined
-                        && this.response.errors[this.listen] !== undefined
+                    if (this.value.errors !== undefined
+                        && this.value.errors[this.listen] !== undefined
                     ) {
-                        errors = this.response.errors[this.listen];
+                        errors = this.value.errors[this.listen];
                     }
                     return errors;
                 },
@@ -575,17 +574,18 @@ Vue.component('vform', Vue.extend({
                 /**
                  * Adds error to response.
                  * @since 1.0.2
+                 * @since 2.0.0 Remove $set.
                  *
                  * @param object options
                  */
                 addError: function(options)
                 {
                     if (this.$parent.response === undefined)
-                        this.$parent.$set('response', {});
+                        this.$parent.response = {};
                     if (this.$parent.response.errors === undefined)
-                        this.$parent.$set('response.errors', {});
+                        this.$parent.response.errors = {};
                     if (this.$parent.response.errors[this.listen] === undefined)
-                        this.$parent.$set('response.errors.'+this.listen, []);
+                        this.$parent.response.errors[this.listen] = [];
                     var message = this.$parent.errors[options[0]];
                     if (options.length > 1)
                         message = message.replace(/\%1\%/, options[1]);
@@ -594,22 +594,24 @@ Vue.component('vform', Vue.extend({
                     this.$parent.response.errors[this.listen].push(message);
                 },
             },
-        }),
+        },
         /**
          * Results.
          * Handles response results.
          * Vue sub component.
          * @since 1.0.0
+         * @since 2.0.0 Refactored to Vue2.
          */
-        'results': Vue.extend({
+        'results': {
             props:
             {
                 /**
                  * Results model.
                  * @since 1.0.0
+                 * @since 2.0.0 Refactored to "value" to use v-model directive.
                  * @var mixed
                  */
-                model:
+                value:
                 {
                     type: [Array, Object, String],
                     default: function()
@@ -667,18 +669,19 @@ Vue.component('vform', Vue.extend({
                 /**
                  * Returns computed records.
                  * @since 1.0.0
+                 * @since 2.0.0 Remove $set.
                  *
                  * @return array
                  */
                 records: function()
                 {
-                    if (!this.$parent.hasMessage && Array.isArray(this.model)) {
+                    if (!this.$parent.hasMessage && Array.isArray(this.value)) {
                         if (this.clearOnFetch) {
-                            this.$set('buffer', this.model);
+                            this.buffer = this.value;
                         } else {
-                            for (var i in this.model) {
-                                if (this.model[i] !== undefined && this.model[i] !== null)
-                                    this.buffer.push(this.model[i]);
+                            for (var i in this.value) {
+                                if (this.value[i] !== undefined && this.value[i] !== null)
+                                    this.buffer.push(this.value[i]);
                             }
                         }
                     }
@@ -700,6 +703,6 @@ Vue.component('vform', Vue.extend({
                 if (this.fetchOnready)
                     this.$parent.submit();
             },
-        }),
+        },
     },
 }));
