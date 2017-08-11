@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 1.0.9
+ * @version 1.0.10
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -224,6 +224,7 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.3 Added event broadcast.
          * @since 1.0.4 Response errors triggers invalid event.
          * @since 1.0.9 Forces response conversion to jsob or blob.
+         * @since 1.0.10 Fixes redirect issue.
          *
          * @param object response Response
          */
@@ -244,8 +245,8 @@ Vue.component('vform', Vue.extend({
                 this.$dispatch('vform_invalid', this.response.errors);
                 this.$broadcast('vform_invalid', this.response.errors);
             }
-            if (response.data.redirect !== undefined)
-                return window.location = response.data.redirect;
+            if (response.redirect !== undefined)
+                return window.location = response.redirect;
             this.onComplete();
         },
         /**
