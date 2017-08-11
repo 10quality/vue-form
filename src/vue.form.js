@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 2.0.1
+ * @version 2.0.2
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -226,7 +226,7 @@ Vue.component('vform', Vue.extend({
          * @since 1.0.4 Response errors triggers invalid event.
          * @since 1.0.9 Forces response conversion to jsob or blob.
          * @since 2.0.0 Use $emit and remove $set.
-         * @since 2.0.1 Fixes response redirect.
+         * @since 2.0.2 Fixes response redirect.
          *
          * @param object response Response
          */
@@ -242,8 +242,8 @@ Vue.component('vform', Vue.extend({
             if (this.response.errors !== undefined && Object.keys(this.response.errors).length > 0) {
                 this.$emit('invalid', this.response.errors);
             }
-            if (response.redirect !== undefined)
-                return window.location = response.redirect;
+            if (this.response.redirect !== undefined)
+                return window.location = this.response.redirect;
             this.onComplete();
         },
         /**
