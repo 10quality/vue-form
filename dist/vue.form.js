@@ -6,7 +6,7 @@
  * @author Alejandro Mostajo <http://about.me/amostajo>
  * @copyright 10Quality <http://www.10quality.com>
  * @license MIT
- * @version 2.0.2
+ * @version 2.0.3
  */
 Vue.component('vform', Vue.extend({
     props:
@@ -699,7 +699,10 @@ Vue.component('vform', Vue.extend({
                     return this.records.length > 0;
                 },
             },
-            ready: function()
+            /**
+             * @since 2.0.3 "ready" replaced with "mounted".
+             */
+            mounted: function()
             {
                 if (this.fetchOnready)
                     this.$parent.submit();
